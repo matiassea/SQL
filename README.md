@@ -26,6 +26,17 @@ show tables; muestra las Tablas, dentro de la DataBase
 9) TINYINT: Numérico que admite solo “1” o “0”, también llamado bandera.
 10) TINYTEXT, TEXT, BIGTEXT: Textos de diferente cantidad de espacios soportados, de mas pocos a mas grandes respectivamente.
 
+Comando auto_increment:
+
+Ventajas
+- Son fáciles de definir, ya que no requieren análisis profundo (y por ende tiene a descuidarse la consistencia).
+- Ocupan menos espacio
+- Se realizan JOINS rápidos (ya que la evaluación es a nivel de binarios), y por ende pueden obtenerse mejores performances en ciertos casos.
+
+Desventajas
+- No se puede hacer integración ni consolidación de sistemas sin complejos procesos de migración de datos con validaciones muy elaboradas.
+- Poco flexibles: la clave es la lógica de operaciones/negocio, si por cualquier motivo quieres cambiarla, tendrías que cambiar todas las tablas, lo cual será un proceso costoso.
+- Normalización: las tablas no están completamente normalizadas porque al añadir un campo adicional (y realmente innecesario para identificar una fila) hay varias claves candidatas.
 
 
 
