@@ -39,4 +39,26 @@ Desventajas
 - Normalización: las tablas no están completamente normalizadas porque al añadir un campo adicional (y realmente innecesario para identificar una fila) hay varias claves candidatas.
 
 
+DATE solo incluye fecha, pero no hora. DATE usa el formato ‘YYYY-MM-DD’. Con un rango de ‘1000-01-01’ a ‘9999-12-31’.
+DATETIME incluye fecha y hora, Usa el formato ‘YYYY-MM-DD HH:MM:SS’. Con un rango de ‘1000-01-01 00:00:00’ a ‘9999-12-31 23:59:59’.
+TIMESTAMP incluye fecha y hora. Con un rango de ‘1970-01-01 00:00:01’ UTC a ‘2038-01-19 03:14:07’ UTC.
+
+### String type
+
+https://dev.mysql.com/doc/refman/8.0/en/string-type-overview.html
+
+
+
+### DATETIME and TIMESTAMP
+
+DATE solo incluye fecha, pero no hora. DATE usa el formato ‘YYYY-MM-DD’. Con un rango de ‘1000-01-01’ a ‘9999-12-31’.
+DATETIME incluye fecha y hora, Usa el formato ‘YYYY-MM-DD HH:MM:SS’. Con un rango de ‘1000-01-01 00:00:00’ a ‘9999-12-31 23:59:59’.
+TIMESTAMP incluye fecha y hora. Con un rango de ‘1970-01-01 00:00:01’ UTC a ‘2038-01-19 03:14:07’ UTC.
+
+https://dev.mysql.com/doc/refman/8.0/en/datetime.html
+https://dev.mysql.com/doc/refman/8.0/en/date-and-time-type-overview.html
+https://dev.mysql.com/doc/refman/8.0/en/data-types.html
+
+
+
 
