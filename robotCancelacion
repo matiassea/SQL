@@ -1,0 +1,213 @@
+USE cancelacionesdb;
+
+DROP TABLE cancelaciondbEntrada;
+DROP TABLE cancelaciondbEntrada2;
+DROP TABLE cancelaciondbSalida;
+
+
+CREATE TABLE cancelaciondbEntrada (
+id INT(11) NOT NULL AUTO_INCREMENT,
+oc INT(5) NOT NULL,
+lineaOC INT(5) NOT NULL,
+solicitud INT(5) NOT NULL,
+lineaSolicitud INT(5) NOT NULL,
+correo VARCHAR(250) NOT NULL,
+proceso VARCHAR(250) NOT NULL,
+status VARCHAR(250) NOT NULL,
+PRIMARY KEY(id)
+);
+
+DROP TABLE cancelaciondbEntrada;
+
+CREATE TABLE cancelaciondbEntrada (
+id INT(11) NOT NULL AUTO_INCREMENT,
+oc INT(5) NOT NULL,
+lineaOC INT(5) NOT NULL,
+solicitud INT(5) NOT NULL,
+lineaSolicitud INT(5) NOT NULL,
+correo VARCHAR(250) NOT NULL,
+proceso VARCHAR(250) NOT NULL,
+status VARCHAR(250) NOT NULL,
+PRIMARY KEY(id)
+);
+
+SELECT * FROM cancelaciondbEntrada;
+SELECT * FROM cancelaciondbSalida;
+
+
+
+INSERT INTO cancelaciondbEntrada VALUES
+(1,82910,2,86310,2,"recepbienesyservicios@aiep.cl","cancelacion","Inicial"),
+(2,86829,1,90965,1,"recepbienesyservicios@aiep.cl","cancelacion","Inicial"),
+(3,87866,3,92066,3,"recepbienesyservicios@aiep.cl","cancelacion","Inicial"),
+(4,81608,3,81608,3,"recepbienesyservicios@aiep.cl","cancelacion","Inicial"),
+(5,81840,3,81840,3,"recepbienesyservicios@aiep.cl","cancelacion","Inicial"),
+(6,87866,2,92066,3,"recepbienesyservicios@aiep.cl","cancelacion","Inicial");
+
+
+
+Merge TargetTableName USING SourceTableName
+ON Merging_Condition
+WHEN MATCHED
+THEN Update_Query
+WHEN NOT MATCHED
+THEN Insert_Query
+WHEN NOT MATCHED BY SOURCE
+THEN DELETE;
+
+MERGE cancelaciondbEntrada t USING cancelaciondbEntrada2 s
+ON (s.oc = t.oc)
+WHEN MATCHED
+THEN UPDATE SET
+t.status = s.status
+WHEN NOT MATCHED BY TARGET
+THEN INSERT (oc, lineaOC)
+VALUES(s.oc,s.lineaOC)
+WHEN NOT MATCHED BY SOURCE
+THEN DELETE;
+
+
+MERGE cancelaciondbEntrada USING cancelaciondbEntrada2
+ON (cancelaciondbEntrada.oc = cancelaciondbEntrada2.oc)
+WHEN MATCHED
+THEN UPDATE SET
+cancelaciondbEntrada.status = cancelaciondbEntrada2.status
+WHEN NOT MATCHED BY TARGET
+THEN INSERT (oc, lineaOC)
+VALUES(cancelaciondbEntrada2.oc,cancelaciondbEntrada2.lineaOC)
+WHEN NOT MATCHED BY SOURCE
+THEN DELETE;
+
+
+SELECT * FROM cancelaciondbEntrada ORDER BY oc ASC;
+SELECT * FROM cancelaciondbEntrada ORDER BY lineaOC ASC;
+SELECT * FROM cancelaciondbEntrada ORDER BY oc ASC, lineaOC ASC;
+SET @i=0;
+UPDATE cancelaciondbEntrada SET id=(@i:=@i+1);
+
+
+
+/////////////////////////////////////////////////////////////////////////////////
+CREATE TABLE cancelaciondbEntrada3 SELECT * FROM cancelaciondbEntrada ORDER BY oc ASC, lineaOC ASC;
+SET @i=0;
+
+UPDATE cancelaciondbEntrada3 SET id=(@i:=@i+1);
+
+ALTER TABLE cancelaciondbEntrada3 ADD OClineaOC INT(10) NOT NULL AFTER status;
+
+SELECT * FROM cancelaciondbEntrada3;
+
+UPDATE cancelaciondbEntrada3 SET OClineaOC=CONCAT(oc, lineaOC);
+
+SELECT * FROM cancelaciondbEntrada2 AS entrada
+INNER JOIN cancelaciondbEntrada3 AS salida ON entrada.OClineaOC = salida.OClineaOC
+WHERE entrada.OClineaOC = 0;
+
+SELECT * FROM cancelaciondbEntrada3 AS entrada
+LEFT JOIN cancelaciondbEntrada2 AS salida ON entrada.OClineaOC = salida.OClineaOC
+WHERE entrada.OClineaOC = 0;
+
+En el siguiente comando se realiza un left join y se avanza
+SELECT * FROM cancelaciondbEntrada3 AS entrada LEFT JOIN cancelaciondbEntrada2 AS salida ON entrada.OClineaOC = salida.OClineaOC;
+
+//Hacer el join
+SELECT * FROM cancelaciondbEntrada3 AS entrada LEFT JOIN cancelaciondbEntrada2 AS salida ON entrada.OClineaOC = salida.OClineaOC;
+
+SELECT entrada.oc,entrada.lineaOC,entrada.solicitud,entrada.lineaSolicitud,entrada.proceso FROM cancelaciondbEntrada3 AS entrada LEFT JOIN cancelaciondbEntrada2 AS salida ON entrada.OClineaOC = salida.OClineaOC;
+SELECT entrada.oc,entrada.lineaOC,entrada.solicitud,entrada.lineaSolicitud,entrada.proceso FROM cancelaciondbEntrada2 AS entrada LEFT JOIN cancelaciondbEntrada3 AS salida ON entrada.OClineaOC = salida.OClineaOC;
+
+
+SELECT entrada.id,entrada.oc,entrada.lineaOC,entrada.solicitud,entrada.lineaSolicitud,entrada.proceso FROM cancelaciondbEntrada2 AS entrada LEFT JOIN cancelaciondbEntrada3 AS salida ON entrada.OClineaOC = salida.OClineaOC;
+
+SELECT entrada.id,entrada.oc,entrada.lineaOC,entrada.solicitud,entrada.lineaSolicitud,entrada.proceso FROM cancelaciondbEntrada2 entrada LEFT JOIN cancelaciondbEntrada3 salida ON entrada.OClineaOC = salida.OClineaOC;
+SELECT * FROM cancelaciondbEntrada2 entrada LEFT JOIN cancelaciondbEntrada3 salida ON entrada.OClineaOC = salida.OClineaOC;
+SELECT * FROM cancelaciondbEntrada2 entrada LEFT JOIN cancelaciondbEntrada3 salida USING (OClineaOC);
+
+SELECT * FROM cancelaciondbEntrada3 entrada LEFT JOIN cancelaciondbEntrada2 salida USING (OClineaOC);
+
+//LEFT utilizando la llave
+SELECT entrada.id,entrada.oc,entrada.lineaOC,entrada.solicitud,entrada.lineaSolicitud,entrada.proceso,salida.OClineaOC FROM cancelaciondbEntrada3 entrada LEFT JOIN cancelaciondbEntrada2 salida USING (OClineaOC);
+
+//LEFT dejando solo el diferencial, que seria imprimible
+SELECT entrada.id,entrada.oc,entrada.lineaOC,entrada.solicitud,entrada.lineaSolicitud,entrada.proceso,salida.OClineaOC,salida.correo FROM cancelaciondbEntrada3 entrada LEFT JOIN cancelaciondbEntrada2 salida USING (OClineaOC) WHERE salida.correo IS NULL;
+
+
+SELECT entrada.oc,entrada.lineaOC,entrada.solicitud,entrada.lineaSolicitud,entrada.proceso FROM cancelaciondbEntrada3 AS entrada LEFT JOIN cancelaciondbEntrada2 AS salida ON entrada.OClineaOC = salida.OCl
+ineaOC;
+
+SELECT entrada.oc,entrada.lineaOC,entrada.solicitud,entrada.lineaSolicitud,entrada.proceso FROM cancelaciondbEntrada3 AS entrada LEFT JOIN SELECT salida.oc,salida.lineaOC,salida.solicitud,salida.lineaSolicitud,salida.proceso FROM cancelaciondbEntrada2 AS salida ON entrada.OClineaOC = salida.OClineaOC;
+
+SELECT entrada.oc,entrada.lineaOC,entrada.solicitud,entrada.lineaSolicitud,entrada.proceso,entrada.OClineaOC FROM cancelaciondbEntrada2 AS entrada LEFT JOIN cancelaciondbEntrada3 AS salida ON entrada.OCli
+neaOC = salida.OClineaOC;
+
+
+CREATE TABLE produccion SELECT * FROM cancelaciondbEntrada3 AS entrada LEFT JOIN cancelaciondbEntrada2 AS salida ON entrada.OClineaOC = salida.OClineaOC;
+
+
+CREATE TABLE produccion SELECT * FROM cancelaciondbEntrada3 AS entrada LEFT JOIN SELECT('oc','lineaOC','solicitud','lineaSolicitud','proceso') FROM cancelaciondbEntrada2 AS salida ON entrada.OClineaOC = salida.OClineaOC;
+CREATE TABLE produccion SELECT * FROM cancelaciondbEntrada3 AS entrada LEFT JOIN SELECT 'oc','lineaOC','solicitud','lineaSolicitud','proceso' FROM cancelaciondbEntrada2 AS salida ON entrada.OClineaOC = salida.OClineaOC;
+CREATE TABLE produccion SELECT * FROM cancelaciondbEntrada3 AS entrada LEFT JOIN SELECT oc,lineaOC,solicitud,lineaSolicitud,proceso FROM cancelaciondbEntrada2 AS salida ON entrada.OClineaOC = salida.OClineaOC;
+
+CREATE TABLE produccion SELECT * FROM cancelaciondbEntrada3 AS entrada LEFT JOIN SELECT oc, lineaOC FROM cancelaciondbEntrada2 AS salida ON entrada.OClineaOC = salida.OClineaOC;
+
+
+SELECT oc,lineaOC,solicitud,lineaSolicitud,proceso FROM cancelaciondbEntrada2 AS salida
+CREATE TABLE produccion SELECT * FROM cancelaciondbEntrada3 AS entrada LEFT JOIN ON entrada.OClineaOC = salida.OClineaOC;
+
+
+
+SELECT * FROM cancelaciondbEntrada2 AS entrada
+INNER JOIN cancelaciondbEntrada3 AS salida ON entrada.OClineaOC != salida.OClineaOC;
+
+
+
+
+SELECT * FROM cancelaciondbEntrada3 AS entrada
+INSERT INTO entrada (oc, lineaOC, solicitud, lineaSolicitud,correo,proceso) 
+SELECT entrada.oc,entrada.lineaOC,entrada.solicitud, entrada.lineaSolicitud,cancelaciondbEntrada2.correo,cancelaciondbEntrada2.proceso WHERE NOT EXISTS (SELECT * FROM cancelaciondbEntrada3 OClineaOC = cancelaciondbEntrada2.OClineaOC
+
+
+INSERT INTO cancelaciondbEntrada3 (oc, lineaOC, solicitud, lineaSolicitud)
+VALUES (1,2,'868291')
+ON DUPLICATE KEY UPDATE cancelaciondbEntrada3.OClineaOC = OClineaOC;
+
+
+
+ALTER TABLE cancelaciondbEntrada2 
+
+SELECT * FROM cancelaciondbEntrada2 AS entrada INNER JOIN cancelaciondbEntrada3 AS salida ON entrada.OClineaOC = salida.OClineaOC;
+
+
+///////////////////////////////////////////////////////////////////////////////////
+
+DROP TABLE cancelaciondbEntrada2;
+
+CREATE TABLE cancelaciondbEntrada2 (
+id INT(11) NOT NULL AUTO_INCREMENT,
+oc INT(5) NOT NULL,
+lineaOC INT(5) NOT NULL,
+solicitud INT(5) NOT NULL,
+lineaSolicitud INT(5) NOT NULL,
+correo VARCHAR(250) NOT NULL,
+proceso VARCHAR(250) NOT NULL,
+status VARCHAR(250) NOT NULL,
+OClineaOC INT(10) NOT NULL,
+PRIMARY KEY(id)
+);
+
+INSERT INTO cancelaciondbEntrada2 VALUES
+(1,86829,1,90965,1,"recepbienesyservicios@aiep.cl","cancelacion","Inicial",868291),
+(2,87866,2,90965,1,"recepbienesyservicios@aiep.cl","cancelacion","Inicial",878662),
+(3,87866,3,90965,1,"recepbienesyservicios@aiep.cl","cancelacion","Inicial",878663);
+
+SELECT * FROM cancelaciondbEntrada2;
+
+///////////////////////////////////////////////////////////////////////////////////
+
+
+CREATE TABLE cancelaciondbEntrada3;
+SELECT CONCAT(oc, lineaOC) FROM cancelaciondbEntrada3;
+
+/////////////////////////////////////////////////////////////////////////////////
+
+
